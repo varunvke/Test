@@ -1,0 +1,46 @@
+{
+  "call": [
+    {
+      "name": "call1",
+      "connection": "userAuth",
+      "url": "https://cignadev1.service-now.com/api/sn_sc/servicecatalog/items/44129d25dbfc4850abcafb5aaf9619b1/order_now",
+      "httpMethod": "POST",
+      "httpParams": "{\"sysparm_quantity\":\"1\",\"variables\":{\"access_mgmt_ticket\":\"${task.id}\",\"saviynt_request_id\":\"${if(task?.source == 'PROVRULE' || task?.source == 'ANALYTICS_V2' || task?.source == 'ANALYTICS'|| task?.source == 'CERTIFICATION'){'No Saviynt Request ID'} else {task.requestKey?.processinstanceid?.substring(task.requestKey?.processinstanceid?.indexOf('.') + 1, task.requestKey?.processinstanceid?.length())}}\",\"service_recipient\":\"${user.customproperty31}\",\"primary_contact\":\"${if(task?.source == 'PROVRULE' || task?.source == 'ANALYTICS_V2' || task?.source == 'ANALYTICS'){'AUTOSAVIYNT'} else {com.saviynt.ecm.identitywarehouse.domain.Users.get(task?.requestedBy).customproperty31}}\",\"description\":\"${if(task?.source == 'CERTIFICATION') {'--------------------------------------------------------------------------------\\\\nSaviynt Security Manager\\\\n --------------------------------------------------------------------------------\\\\nBASIC INFORMATION\\\\n--------------------------------------------------------------------------------\\\\nAccess Review\\\\n--Certifier: ' + com.saviynt.ecm.identitywarehouse.domain.Users.get(com.saviynt.ecm.campaign.domain.Certification.get(task.sourceId).certifier).username + '\\\\n--Certifier Name: ' + com.saviynt.ecm.identitywarehouse.domain.Users.get(com.saviynt.ecm.campaign.domain.Certification.get(task.sourceId).certifier).firstname + ' ' + com.saviynt.ecm.identitywarehouse.domain.Users.get(com.saviynt.ecm.campaign.domain.Certification.get(task.sourceId).certifier).lastname + '\\\\n--Access Review for Employee: ' + user.firstname + ' ' + user.lastname + '\\\\n--Employee Id: ' + user.employeeid +'\\\\n--------------------------------------------------------------------------------\\\\nAccess Review Instruction \\\\n--------------------------------------------------------------------------------'} else if (task?.source == 'REQUEST') {'--------------------------------------------------------------------------------\\\\nSaviynt Security Manager\\\\n --------------------------------------------------------------------------------\\\\nBASIC INFORMATION\\\\n--------------------------------------------------------------------------------\\\\nAccess Request\\\\n--Request ID: ' + task.requestKey?.processinstanceid?.substring(task.requestKey?.processinstanceid?.indexOf('.') + 1, task.requestKey?.processinstanceid?.length()) + '\\\\n--Requester: ' + com.saviynt.ecm.identitywarehouse.domain.Users.get(task?.requestedBy).username + '\\\\n--Requester Name: ' + com.saviynt.ecm.identitywarehouse.domain.Users.get(task?.requestedBy).firstname + ' ' + com.saviynt.ecm.identitywarehouse.domain.Users.get(task?.requestedBy).lastname + '\\\\n--Access Request for Employee: ' + user?.firstname + ' ' + user?.lastname + '\\\\n--Employee Id: ' + user?.employeeid +'\\\\n--------------------------------------------------------------------------------\\\\nAccess Request Instruction \\\\n--------------------------------------------------------------------------------'} else if (task?.source == 'PROVRULE') {'--------------------------------------------------------------------------------\\\\nSaviynt Security Manager\\\\n --------------------------------------------------------------------------------\\\\nBASIC INFORMATION\\\\n--------------------------------------------------------------------------------\\\\nAccount and Access Request\\\\n--Request Source:  Rule Based Task - ' + task?.comments + '\\\\n--Employee: ' + user?.firstname + ' ' + user?.lastname + '\\\\n--Employee Id: ' + user?.employeeid + '\\\\n--Employee Disabled timestamp: ' + user?.customproperty34 + '\\\\n--Employee Status: ' + (user.statuskey == 1 ? 'Active' : 'Terminated') + '\\\\n--------------------------------------------------------------------------------\\\\nAccess Request Instruction \\\\n--------------------------------------------------------------------------------'} else if (task?.source == 'ANALYTICS_V2' || task?.source == 'ANALYTICS') {'--------------------------------------------------------------------------------\\\\nSaviynt Security Manager\\\\n --------------------------------------------------------------------------------\\\\nBASIC INFORMATION\\\\n--------------------------------------------------------------------------------\\\\nAccount and Access Request\\\\n--Request Source: Inactive User with Active Account - Actionable Report\\\\n--Employee: ' + user?.firstname + ' ' + user?.lastname + '\\\\n--Employee Id: ' + user?.employeeid + '\\\\n--Employee Disabled timestamp: ' + user?.customproperty34 + '\\\\n--Employee Status: ' + (user.statuskey == 1 ? 'Active' : 'Terminated') + '\\\\n--------------------------------------------------------------------------------\\\\nAccess Request Instruction \\\\n--------------------------------------------------------------------------------'} else {''}}\\\\n--Application Name: ${task?.endpoint?.displayName}\\\\n--Account Name: ${task?.accountName}\\\\n--Business Justification: ${replace(task?.comments, '"', '')}\\\\n--Approval/Addtional Comments: ${businessJustification}\\\\n--Request Type: ${if(task.tasktype==1){'Add Access'}else if(task.tasktype==2 && (allEntitlementsValues==null || allEntitlementsValues.isEmpty() || allEntitlementsValues=='')){'Delete Account'}else if(task.tasktype==2){'Remove Access'}else if(task.tasktype==3){'New Account'}else if(task.tasktype==6){'Enable Account'}else if(task.tasktype==12){'Update Account'}else if(task.tasktype==14){'Disable Account'}else{task.tasktype}}\\\\n--Actions: \\\\n${'Account: ' + account + '\\\\nAccess:\\\\n' +allEntitlementsValues}\\\\n${(reqAttrs.customproperty1 != null ? (endpoint.customproperty41 +': ' + reqAttrs.customproperty1) : '') }\\\\n${(reqAttrs.customproperty2 != null ? (endpoint.customproperty42 +': ' + reqAttrs.customproperty2) : '')} \\\\n${(reqAttrs.customproperty3 != null ? (endpoint.customproperty43 +': ' + reqAttrs.customproperty3) : '')} \\\\n${(reqAttrs.customproperty4 != null ? (endpoint.customproperty44 +': ' + reqAttrs.customproperty4) : '')} \\\\n${(reqAttrs.customproperty5 != null ? (endpoint.customproperty45 +': ' + reqAttrs.customproperty5) : '')}\\\\n--------------------------------------------------------------------------------\\\\nUser Details\\\\n--------------------------------------------------------------------------------\\\\nUser: ${user?.firstname} ${user?.lastname} ${user?.username} ${user?.email}  Manager: ${usermanager?.firstname} ${usermanager?.lastname} ${usermanager?.username} ${usermanager?.email}\",\"template_name\":\"${if(task?.entitlement_valueKey?.customproperty7 && (task?.entitlement_valueKey?.customproperty7 != '' || task?.entitlement_valueKey?.customproperty7 != null)) {(task?.entitlement_valueKey?.customproperty7)}else{(task?.endpoint?.customproperty26)}}\"},\"get_portal_messages\":\"true\" }",
+      "httpHeaders": {
+        "Authorization": "${access_token}"
+      },
+      "httpContentType": "application/json",
+      "ticketidPath": "result.number",
+      "ticketStatusPath": "result.state",
+      "ticketStatusValue": [
+        "Open",
+        "OPEN",
+        "open"
+      ],
+      "successResponses": {
+        "statusCode": [
+          200,
+          201,
+          202,
+          203,
+          204,
+          205
+        ]
+      },
+      "unsuccessResponses": {
+        "statusCode": [
+          400,
+          401,
+          404,
+          405,
+          500
+        ]
+      },
+	  "extraInfo": {
+        "entValExtraInfo": [
+          "description"
+        ]
+      }
+    }
+  ]
+}
