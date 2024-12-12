@@ -1,21 +1,28 @@
-${(((task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeOwner')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeInSafe')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeSafe')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeAddLockdownSvr')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeRemoveLockdownSvr')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeLogonBatchAdd')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeLogonServiceAdd')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeOktaAccount')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeAccountAdmin')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeCloudAccount')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeAdditionalInfo')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeCyberarkSafe')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes') || (task?.requestAccessKey?.collect{ it.request_access_attrss.findAll{it.attributeName.toString().equalsIgnoreCase('ChangeAllWorkstations')}.collect{it.attributeValue}.get(0)}.get(0) == 'Yes')) ? 'servicenow@cigna.com' : 'ARS_NO_REPLY@cigna.com')}
-
-
-
-def email = task?.requestAccessKey?.request_access_attrss?.any { attr ->
-    [
-        'ChangeOwner', 
-        'ChangeInSafe', 
-        'ChangeSafe', 
-        'ChangeAddLockdownSvr', 
-        'ChangeRemoveLockdownSvr', 
-        'ChangeLogonBatchAdd', 
-        'ChangeLogonServiceAdd', 
-        'ChangeOktaAccount', 
-        'ChangeAccountAdmin', 
-        'ChangeCloudAccount', 
-        'ChangeAdditionalInfo', 
-        'ChangeCyberarkSafe', 
-        'ChangeAllWorkstations'
-    ].contains(attr.attributeName?.toString()) && attr.attributeValue == 'Yes'
-} ? 'servicenow@cigna.com' : 'ARS_NO_REPLY@cigna.com'
+{
+  "call": [
+    {
+      "name": "USM_ORACLE_Access",
+      "processingType": "http",
+      "connection": "userAuth",
+      "url": "https://ansibletower.sys.cigna.com/api/v2/job_templates/9479/launch/",
+      "httpMethod": "POST",
+      "httpContentType": "application/json",
+      "httpParams": "{\"extra_vars\": {\"servicename\": \"${requestAccessAttributes.get('newdatabase') == '' || requestAccessAttributes.get('newdatabase') == 'null' || requestAccessAttributes.get('newdatabase') == null  || requestAccessAttributes.get('newdatabase') == ' ' ? requestAccessAttributes.get('existdatabase') : requestAccessAttributes.get('newdatabase')}\", \"port\": \"${requestAccessAttributes.get('portnew') == '' || requestAccessAttributes.get('portnew') == 'null' || requestAccessAttributes.get('portnew') == null  || requestAccessAttributes.get('portnew') == ' ' ? requestAccessAttributes.get('portexist') : requestAccessAttributes.get('portnew')}\", \"hostname\": \"${requestAccessAttributes.get('hostnamenew') == '' || requestAccessAttributes.get('hostnamenew') == 'null' || requestAccessAttributes.get('hostnamenew') == null  || requestAccessAttributes.get('hostnamenew') == ' ' ? requestAccessAttributes.get('hostnameexist') : requestAccessAttributes.get('hostnamenew')}\", \"username\": \"${user.customproperty1}\", \"role\": \"${entitlementValue.customproperty2}\",\"taskkey\": \"${arsTasks.id}\"}}",
+      "httpHeaders": {
+        "Authorization": "${token}"
+      },
+      "successResponses": {
+        "statusCode": []
+      },
+      "unsuccessResponses": {
+        "statusCode": [
+          400,
+          401,
+          404,
+          405,
+          500,200,201
+        ]
+      }
+    }
+  ]
+}
