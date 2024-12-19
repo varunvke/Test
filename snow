@@ -1,28 +1,26 @@
-{
-  "call": [
-    {
-      "name": "USM_ORACLE_Access",
-      "processingType": "http",
-      "connection": "userAuth",
-      "url": "https://ansibletower.sys.cigna.com/api/v2/job_templates/9479/launch/",
-      "httpMethod": "POST",
-      "httpContentType": "application/json",
-      "httpParams": "{\"extra_vars\": {\"servicename\": \"${requestAccessAttributes.get('newdatabase') == '' || requestAccessAttributes.get('newdatabase') == 'null' || requestAccessAttributes.get('newdatabase') == null  || requestAccessAttributes.get('newdatabase') == ' ' ? requestAccessAttributes.get('existdatabase') : requestAccessAttributes.get('newdatabase')}\", \"port\": \"${requestAccessAttributes.get('portnew') == '' || requestAccessAttributes.get('portnew') == 'null' || requestAccessAttributes.get('portnew') == null  || requestAccessAttributes.get('portnew') == ' ' ? requestAccessAttributes.get('portexist') : requestAccessAttributes.get('portnew')}\", \"hostname\": \"${requestAccessAttributes.get('hostnamenew') == '' || requestAccessAttributes.get('hostnamenew') == 'null' || requestAccessAttributes.get('hostnamenew') == null  || requestAccessAttributes.get('hostnamenew') == ' ' ? requestAccessAttributes.get('hostnameexist') : requestAccessAttributes.get('hostnamenew')}\", \"username\": \"${user.customproperty1}\", \"role\": \"${entitlementValue.customproperty2}\",\"taskkey\": \"${arsTasks.id}\"}}",
-      "httpHeaders": {
-        "Authorization": "${token}"
-      },
-      "successResponses": {
-        "statusCode": []
-      },
-      "unsuccessResponses": {
-        "statusCode": [
-          400,
-          401,
-          404,
-          405,
-          500,200,201
-        ]
-      }
-    }
-  ]
-}
+---
+- name: Generate a secure random password
+  hosts: localhost
+  tasks:
+    - name: Generate a random password with specified rules
+      set_fact:
+        random_password: >-
+          {{ lookup(
+              'password',
+              '/dev/null length=20 chars=ascii_letters,digits') +
+              lookup('password', '/dev/null length=1 chars=ascii_uppercase') +
+              lookup('password', '/dev/null length=1 chars=ascii_lowercase') +
+              lookup('password', '/dev/null length=1 chars=digits')
+          | shuffle }}
+
+    - name: Display the generated password
+      debug:
+        msg: "Generated password: {{ random_password }}"
+
+    - name: Save the password to a file
+      copy:
+        content: "{{ random_password }}"
+        dest: "/tmp/secure_password.txt"
+        owner: root
+        group: root
+        mode: '0600'
