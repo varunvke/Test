@@ -1,26 +1,32 @@
----
-- name: Generate a secure random password
-  hosts: localhost
-  tasks:
-    - name: Generate a random password with specified rules
-      set_fact:
-        random_password: >-
-          {{ lookup(
-              'password',
-              '/dev/null length=20 chars=ascii_letters,digits') +
-              lookup('password', '/dev/null length=1 chars=ascii_uppercase') +
-              lookup('password', '/dev/null length=1 chars=ascii_lowercase') +
-              lookup('password', '/dev/null length=1 chars=digits')
-          | shuffle }}
-
-    - name: Display the generated password
-      debug:
-        msg: "Generated password: {{ random_password }}"
-
-    - name: Save the password to a file
-      copy:
-        content: "{{ random_password }}"
-        dest: "/tmp/secure_password.txt"
-        owner: root
-        group: root
-        mode: '0600'
+{
+    "accountIdPath": "accountName",
+    "call": [
+        {
+            "name": "call1",
+            "processingType": "http",
+            "connection": "userAuth",
+            "url": "https://ansibletower.sys.cigna.com/api/v2/job_templates/8988/launch/",
+            "httpMethod": "POST",
+            "httpContentType": "application/json",
+            "httpParams": "{\"extra_vars\": {\"servicename\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? requestAccessAttributes.get('svc_newdatabase') : requestAccessAttributes.get('newdatabase')}\", \"port\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? requestAccessAttributes.get('svc_portnew') : requestAccessAttributes.get('portnew')}\", \"hostname\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? requestAccessAttributes.get('svc_hostnamenew') : requestAccessAttributes.get('hostnamenew')}\", \"username\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? arsTasks.accountName.toString()?.substring(0, arsTasks.accountName.indexOf('.')) : user.customproperty1}\"}}",
+            "httpHeaders": {
+                "Authorization": "${token}"
+            },
+            "successResponses": {
+                "statusCode": [
+                    200,
+                    201
+                ]
+            },
+            "unsuccessResponses": {
+                "statusCode": [
+                    400,
+                    401,
+                    404,
+                    405,
+                    500
+                ]
+            }
+        }
+    ]
+}
