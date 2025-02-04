@@ -1,0 +1,42 @@
+URL
+https://varun.saviyntcloud.com/ECM/api/v5/getEntitlements
+
+    "endpoint": "core::app::oracle",
+    "entQuery": "ent.entitlement_value like 'SAVIYNT_READ.[SAVNTDEV]'"
+}
+
+Response
+{
+    "msg": "Successful",
+    "Entitlementdetails": [
+        {
+            "entitlement_valuekey": "7333962",
+            "Business application name": "ORACLE_USM",
+            "endpointKey": 1945,
+            "Custom Property App specific": "NON-PROD",
+            "description": "SAVNTDEV.CIGNA.COM",
+            "entitlementOwner": [
+                "156471",
+                "587936"
+            ],
+            "Business Function": "SAVIYNT_READ",
+            "entitlementTypeName": "USM_ORACLE_Access",
+            "customproperty36": "Development",
+            "entitlementType": "USM_ORACLE_Access",
+            "entitlement_glossary": "",
+            "entitlementTypeKey": 5501,
+            "Level of Access": "1601",
+            "endpoint": "core::app::oracle",
+            "Requestable": "CILORCLD1047",
+            "requestForm": "Request Form Table",
+            "Access to Critical Information": "SAVNTDEV.CIGNA.COM",
+            "displayname": "SAVIYNT_READ.[SAVNTDEV]",
+            "entitlement_value": "SAVIYNT_READ.[SAVNTDEV]",
+            "status": "1",
+            "childEntitlementCount": 0
+        }
+    ],
+    "totalEntitlementCount": 1,
+    "entitlementsCount": 1,
+    "errorCode": "0"
+}
