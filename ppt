@@ -1,17 +1,25 @@
-ETL
-Linux Data:
-1.	Receive Raw data from Linux team in Windows shared drive
-2.	ETL processes the files from shared drive and parses the data into ETL Database
-Oracle Data:
-1.	Oracle team updates the ETS database with the access, roles and connectivity info
-•	select * from dbsec.SAVIYNT_ENTERPRISE_ROLES; -- all roles that exist
-•	select * from dbsec.SAVIYNT_ENTERPRISE_ROLE_PRIVS; -- all privileges that are assigned to users and roles
-•	select * from dbsec.ORA_DATABASES_SAVIYNTVW; -- connectivity info
-2.	ETL processes the data from ETS and updates that in ETL Database
-
-Saviynt
-1.	Recon connection is linked to ETL database and data is consumed into Saviynt
-2.	User can submit request in Saviynt ARS for the following operations
-a.	Linux - New Account, Add Access, Remove Access, Delete Account, Enable Account, Disable Account, Reset Password
-b.	Oracle – New Account, Add Access, Remove Access, Delete Account, Reset Password
-3.	New Account tasks goes to completed as soon as job is triggered in Ansible, rest of the tasks stay as pending tasks until they get a response from Ansible.
+="Saviynt Security Manager
+--------------------------------------------------------------------------------
+BASIC INFORMATION
+--------------------------------------------------------------------------------
+Access Request
+--Request ID: " & D2 & "
+--Requester: " & N2 & "
+--Requester Name: " & M2 & "
+--Access Request for Employee: " & L2 & "
+--Employee ID: " & I2 & "
+--------------------------------------------------------------------------------
+Access Request Instruction 
+--------------------------------------------------------------------------------
+--Application Name: " & F2 & "
+--Account Name: " & H2 & "
+--Business Justification: 
+--Additional Comments: 
+Actions: 
+--Request Type: " & T2 & "
+--Account: " & H2 & "
+Access: " & R2 & ", " & S2 & "
+--------------------------------------------------------------------------------
+User Details
+--------------------------------------------------------------------------------
+User: " & L2 & " " & I2 & " " & J2
