@@ -1,32 +1,27 @@
 {
-    "accountIdPath": "accountName",
-    "call": [
-        {
-            "name": "call1",
-            "processingType": "http",
-            "connection": "userAuth",
-            "url": "https://ansibletower.sys.cigna.com/api/v2/job_templates/8988/launch/",
-            "httpMethod": "POST",
-            "httpContentType": "application/json",
-            "httpParams": "{\"extra_vars\": {\"servicename\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? requestAccessAttributes.get('svc_newdatabase') : requestAccessAttributes.get('newdatabase')}\", \"port\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? requestAccessAttributes.get('svc_portnew') : requestAccessAttributes.get('portnew')}\", \"hostname\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? requestAccessAttributes.get('svc_hostnamenew') : requestAccessAttributes.get('hostnamenew')}\", \"username\": \"${requestAccessAttributes.get('ACCOUNTTYPE') == 'Service Account' ? arsTasks.accountName.toString()?.substring(0, arsTasks.accountName.indexOf('.')) : user.customproperty1}\"}}",
-            "httpHeaders": {
-                "Authorization": "${token}"
-            },
-            "successResponses": {
-                "statusCode": [
-                    200,
-                    201
-                ]
-            },
-            "unsuccessResponses": {
-                "statusCode": [
-                    400,
-                    401,
-                    404,
-                    405,
-                    500
-                ]
-            }
-        }
-    ]
+"authentications": {
+"acctAuth": {
+"authType": "oauth2",
+"url": "https://zilverton-admin.oktapreview.com/api/v1",
+"httpMethod": "POST",
+"httpHeaders": {
+"contentType": "application/json"
+},
+"httpContentType": "application/json",
+"expiryError": "ExpiredAuthenticationToken",
+"authError": [
+"InvalidAuthenticationToken",
+"AuthenticationFailed"
+],
+"timeOutError": "Read timed out",
+"errorPath": "error.code",
+"maxRefreshTryCount": 5,
+"tokenResponsePath": "access_token",
+"tokenType": "SSWS", "accessToken": "SSWS 00Hh1TfaCUM6mpLmHGRhCOjFcnSsliDMJ5k7TWhwnF"
 }
+}
+}
+
+
+
+{"auditDetails":{"OktaGroup":[{"headers":null,"message":{"errorCode":"E0000005","errorSummary":"Invalid session","errorLink":"E0000005","errorId":"oaekFRTc7xjRbmexMauWJ9w5g","errorCauses":[]},"statusCode":403,"description":null,"status":"Failed"}]},"OktaGroup":{"headers":null,"message":{"errorCode":"E0000005","errorSummary":"Invalid session","errorLink":"E0000005","errorId":"oaeQqQopEb_Qj2hLCevxRRn3A","errorCauses":[]},"statusCode":403,"description":null,"status":"Failed"}}
