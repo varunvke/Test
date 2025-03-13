@@ -1,25 +1,38 @@
-="Saviynt Security Manager
---------------------------------------------------------------------------------
-BASIC INFORMATION
---------------------------------------------------------------------------------
-Access Request
---Request ID: " & D2 & "
---Requester: " & N2 & "
---Requester Name: " & M2 & "
---Access Request for Employee: " & L2 & "
---Employee ID: " & I2 & "
---------------------------------------------------------------------------------
-Access Request Instruction 
---------------------------------------------------------------------------------
---Application Name: " & F2 & "
---Account Name: " & H2 & "
---Business Justification: 
---Additional Comments: 
-Actions: 
---Request Type: " & T2 & "
---Account: " & H2 & "
-Access: " & R2 & ", " & S2 & "
---------------------------------------------------------------------------------
-User Details
---------------------------------------------------------------------------------
-User: " & L2 & " " & I2 & " " & J2
+select
+at.status as TASK_STATUS,
+at.PROVISIONINGMETADATA,
+at.taskkey as TASKKEY,
+at.PARENTTASK,
+SUBSTRING_INDEX(AR.JBPMPROCESSINSTANCEID, '.', -1) AS REQUEST_ID, 
+at.STARTDATE as TASK_START_DATE,
+ep.DISPLAYNAME, 
+ep.customproperty26 as SNOW_TEMPLATE, 
+at.ACCOUNTNAME,  
+u.username, 
+u.email,
+concat(UM.LASTNAME, ', ', UM.FIRSTNAME) as MANAGER,
+concat(U.LASTNAME, ', ', U.FIRSTNAME) as REQUESTED_FOR_FULLNAME, 
+concat(U1.LASTNAME, ', ', U1.FIRSTNAME) as REQUESTED_BY_FULLNAME,
+u1.username as requester_eid,
+u.customproperty31 as SNOW_EID, 
+at.COMMENTS as TASK_COMMENTS,
+at.PROVISIONINGCOMMENTS,
+ev.ENTITLEMENT_VALUE,
+ev.DESCRIPTION,
+CASE
+WHEN at.TASKTYPE = 1 THEN 'Add Access'
+WHEN at.TASKTYPE = 2 THEN 'Remove Access'
+WHEN at.TASKTYPE = 3 THEN 'New Account'
+ELSE at.tasktype
+END AS 'Task Type'
+from arstasks at
+join endpoints ep on ep.ENDPOINTKEY = at.endpoint
+join users u on u.userkey = at.userkey
+join users um on um.userkey=u.userkey
+join ars_requests ar on ar.REQUESTKEY=at.REQUESTKEY
+join users u1 on u1.userkey=ar.REQUESTOR
+join entitlement_values ev on ev.ENTITLEMENT_VALUEKEY=at.ENTITLEMENT_VALUEKEY
+join securitysystems ss on ss.SYSTEMKEY = ep.SECURITYSYSTEMKEY
+where at.PROVISIONINGCOMMENTS like ('%Error in getting Ticket Number. Response: null%') 
+and at.ticketid is null
+and ss.SERVICEDESKCONNECTION = 74
